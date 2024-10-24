@@ -1,0 +1,60 @@
+def Confirmation_run():
+	# insert booking
+	global user_LoggedIn ## variable needed to know who logged in ##
+	#global Tot_Price ## variable needed to hold total calculated price ##
+	Numdays = numdays_dates(Date_chosen.value , Date_chosen2.value)
+	#
+	# MOVES ALL DETAILS TO CONFIRMATION 
+	total_price = calculations(Numdays) 
+	Final_s_date_box.value = Date_chosen.value
+	Final_e_date_box.value = Date_chosen2.value
+	CarRbox.value = car_reg.value
+	CarQbox.value = car_qual.value
+	CarTbox.value = car_type.value
+	Final_amount_box.value = total_price
+	#
+	#
+	InsertdataSQL = "INSERT INTO Booking( Booking_StartDate, Booking_EndDate, Booking_Car_Registration, Booking_Car_Type, Booking_Car_Quality, Booking_Total_Price, UserID) VALUES ( ?, ?, ?, ?, ?, ? , ?)"
+	execute_sql (database_file, InsertdataSQL, ( str(Date_chosen.value), str(Date_chosen2.value), str(car_reg.value), str(car_type.value), str(car_qual.value), total_price ,user_LoggedIn))
+	#execute_sql1(database_file,InsertdataSQL) #input the new booking into the databa, ?se)
+	info('Thank you!','Thank you for the Booking!') # pop up message#
+
+
+
+	Confirmation.show()
+
+##################################################################################################################################################################################################################
+#################################
+# build Booking Confirmation    #
+#################################
+Confirmation= Window(app,title = 'Booking Confirmed with receipt', width = 500, height = 500) #creates a new window
+Confirmation_box = Box(Confirmation, layout = "grid", border = True) #creates a boarder with a box
+Confirmation.hide() #hides the window
+Confirmation.bg = "#e5e5e5" #assign the window to a specific colour
+
+Confirmation_message = Text(Confirmation_box, text = ("Booking Confirmed with receipt"), grid = [0,0]) #title of what the window is 
+CarType = Text(Confirmation_box, text="Car Type: ", grid = [0,1], align="left") #tells what the user is looking at
+CarTbox = TextBox(Confirmation_box, text ="", grid = [1,1])#this shows the user what date they had chose
+CarQual = Text(Confirmation_box, text="Car Qual: ", grid = [0,2], align="left") #tells what the user is looking at
+CarQbox = TextBox(Confirmation_box, text ="", grid = [1,2])#this shows the user what date they had chose
+CarReg = Text(Confirmation_box, text="Car Reg: ", grid = [0,3], align="left") #tells what the user is looking at
+CarRbox = TextBox(Confirmation_box, text ="", grid = [1,3])#this shows the user what date they had chose
+Final_s_date = Text(Confirmation_box, text="Start Date: ", grid = [0,4], align="left")
+Final_s_date_box = TextBox(Confirmation_box, text ="", grid = [1,4])#this shows the user what date they had chose
+final_e_date = Text(Confirmation_box, text="End Date: ", grid = [0,5], align="left")
+Final_e_date_box = TextBox(Confirmation_box, text ="", grid = [1,5])#this shows the user what date they had chose
+Final_amount = Text(Confirmation_box,text="Total:",align="left",grid=[0,6])
+Final_amount_box = TextBox(Confirmation_box, grid=[1,6])
+
+#btn_done = PushButton(Confirmation_box, text="Finalise", command=booking_validation(car_type , Date_chosen, Date_chosen2), width = 15, grid = [0,6]) 
+btn_back = PushButton(Confirmation_box, text="Back", command=back_dash, width = 15, grid = [2,6]) #this allows the user to go back to the booking menu
+btn_exit = PushButton(Confirmation_box, text="Exit", command=exit, width = 15, grid = [3,6]) #this allows the user to leave the program
+pic = Picture(Confirmation, image="Cheemzauto.png", width = 285, height = 285) #this adds a picture
+
+menubar = MenuBar(Confirmation,
+                  toplevel=["Apperance","Fonts", "Size"],
+                  options=[
+                      [ ["Light Mode", Light_Mode], ["Dark Mode", Dark_Mode] ],
+					  [ ["Courier", Courier_font], ["Verdana", Verdana_font], ["Helvetica", Helvetica_font] ],
+					  [["10%", Zoom10],["20%", Zoom20],["30%", Zoom30],["40%", Zoom40],["50%", Zoom50]]
+                  ])
